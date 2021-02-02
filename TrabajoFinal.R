@@ -122,13 +122,16 @@ gbmtune
 rftune
 
 #Elegimos boosting
-fit.gbm <- train(diagnosis~., data=usedata, method = 'gbm', trControl=fitControl, tuneGrid=gbmGrid, metric='Accuracy', distribution='bernoulli')
+fit.gbm <- train(diagnosis~., data=dataset, method = 'gbm', trControl=fitControl, tuneGrid=gbmGrid, metric='Accuracy', distribution='bernoulli')
 fit.gbm
 
-boost.caret.pred <- predict(fit.gbm,valdata)
+boost.caret.pred <- predict(fit.gbm,validation)
 table(boost.caret.pred,validation$diagnosis)
+#   B  M
+#B 85  1
+#M  4 52
 mean(boost.caret.pred==validation$diagnosis)
-
+#0.9647887
 
 #-------------------------------------------------------------------------------
 #review gbmtune to choose a model to estimate on complete train-data.
