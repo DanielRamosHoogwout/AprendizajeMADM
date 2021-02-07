@@ -45,7 +45,11 @@ df_mat2 <- as.matrix(dataset2[ ,-1])
 new_mat <- df_mat2[,2:5]
 pr.out.2=prcomp(new_mat, scale=TRUE)
 pr.out.2$rotation
+#La primera componente recoge muy bien que la ONU da el mismo peso a estos indicadores
+#La segunda recoge principalmente la PIB per capita
 biplot(pr.out.2, scale=0)
 pr.out.2$sdev
+#Con el criterio de la varianza, nos quedariamos con una sola componente
 screeplot(pr.out.2, type = "l", main = "Varianzas de los Componentes Principales",
           col = "blue", cex.main = 0.8)
+#En cambio con la regla del codo, cogeriamos 2 componentes principales
