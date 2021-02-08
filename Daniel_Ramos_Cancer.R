@@ -58,7 +58,7 @@ fitControl <- trainControl(method = 'cv', number = 5, summaryFunction=defaultSum
 #Escogemos los valores del grid para el modelo gbm
 gbmGrid <-  expand.grid(interaction.depth = c(1,4,7,10),
                         n.trees = c(500,1000,2000),
-                        shrinkage = c(.005, .02,.05),
+                        shrinkage = c(.005, .02,.05,.01),
                         n.minobsinnode = 10)
 
 gbmGrid
