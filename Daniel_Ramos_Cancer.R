@@ -126,6 +126,7 @@ rftune
 #Elegimos boosting porque es más preciso
 fit.gbm <- train(diagnosis~., data=dataset, method = 'gbm', trControl=fitControl, tuneGrid=gbmGrid, metric='Accuracy', distribution='bernoulli')
 fit.gbm
+fit.gbm$bestTune
 
 boost.caret.pred <- predict(fit.gbm,validation)
 table(boost.caret.pred,validation$diagnosis)
