@@ -15,11 +15,11 @@ library("gbm")
 
 ## Clasificación del cancer
 
-En el siguiente documento se utilizan los datos extraidos de https://www.kaggle.com/uciml/breast-cancer-wisconsin-data para hacer competir modelos de Boosting y Random Forest a la hora de clasificar si un cancer es benigno o maligno.
+En el siguiente documento se utilizan los datos extraídos de https://www.kaggle.com/uciml/breast-cancer-wisconsin-data para hacer competir modelos de Boosting y Random Forest a la hora de clasificar si un cancer es benigno o maligno.
 
 ### Carga de datos y limpieza
 
-Se cargan los datos y se eliminan 2 columnas que no nos interesan para clasificar datos y aparte uno de ellos contenia NA's
+Se cargan los datos y se eliminan 2 columnas que no nos interesan para clasificar datos y aparte uno de ellos contiene NA's.
 ```{r load, eval=FALSE}
 set.seed(2021)
 #Cargamos los datos
@@ -149,13 +149,12 @@ mean(rfacc) #0.9509973
 gbmtune
 rftune
 ```
-El modelo ganador es boosting ya que tiene un precisión mayor, en concreto, 97%. Mientras que Random Forest 95%.
+El modelo ganador es boosting, ya que tiene un precisión mayor, en concreto, 97%. Mientras que Random Forest 95%.
 
-### Modelo ganador
+### Boosting como modelo ganador
 
-Finalmente el modelo ganador es Boosting, por tanto, volvemos a hacer el "tuning" de boosting para evitar una combinación de las diferentes k del CV anterior.
+Finalmente el modelo ganador es Boosting, por tanto, volvemos a hacer el "tuning" de boosting para evitar una combinación de las diferentes k del CV anterior y obtener otra vez el mejor modelo posible.
 ```{r final, eval=FALSE}
-#Elegimos boosting porque es más preciso
 fit.gbm <- train(diagnosis~., data=dataset, method = 'gbm', trControl=fitControl, tuneGrid=gbmGrid, metric='Accuracy', distribution='bernoulli')
 fit.gbm
 fit.gbm$bestTune
@@ -171,11 +170,11 @@ mean(boost.caret.pred==validation$diagnosis)
 
 ```
 Finalmente observamos que el modelo ganador de Boosting es un modelo con 2000 árboles, interaction.depth de 4, shrinkage de 0.05 y n.minobsinnode de 10 predice con una precisión de 96%. 
-Hay que destacar que el modelo final es mejorable ya que podríamos incrementar el número de árboles a 3000, en shrinkage también podríamos añadir el valor 0.1. Si estos valores mencionados anteriormente volviesen a aparecer como el mejor modelo, podríamos incrementar esto valores nuevamente y comprobar si la precisión aumenta.
-En el caso de Random Forest tendriamos que haber llegado hasta un mtry igual a el número de variables menos 1, en este caso, mtry máximo seria igual a 30.
+Hay que destacar que el modelo final es mejorable ya que podríamos incrementar el número de árboles a 3000, en shrinkage también podríamos añadir el valor 0.1. Si estos valores mencionados anteriormente volviesen a aparecer como el mejor modelo, podríamos incrementar estos valores nuevamente y comprobar si la precisión aumenta y volveriamos a repetir el mismo proceso hasta que la precisión deje de aumentar.
+En el caso de Random Forest tendriamos que haber llegado hasta un mtry igual al número de variables menos 1, en este caso, mtry máximo seria igual a 30.
 
 En todos estos casos se ha optado por escoger menos opciones a la hora de crear el grid para ambos modelos ahorrando tiempo de ejecución, ya que la potencia de cálculo del ordenador sobre el cuál se han ejectuado estos modelos es de potencia limitada.
 
-El próposito final de este documento no es clasificar el cancer de la mejor manera posible sino demostrar que se han asimilado los conceptos explicados durante el curso y su aplicación en este trabajo.
+El próposito final de este documento no es clasificar el cancer de la mayor precisión posible sino demostrar que se han asimilado los conceptos explicados durante el curso y su aplicación en este trabajo.
 
 
