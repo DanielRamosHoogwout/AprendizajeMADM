@@ -1,0 +1,71 @@
+---
+title: "CV_RS"
+author: "Daniel Ramos"
+date: "24/2/2021"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Superficies de Respuesta
+
+## 1. Seleccionar el valor de p para q (0:99; n), mediante validación cruzada. Estableced set.seed(1). ¿Qué error cuadrático medio tiene?
+
+```{r carga}
+#Cargamos la libreria
+library(boot)
+#Cargamos los datos
+df = read.csv2("CV_RS_quantils.csv")
+#Establecemos la semilla de aleatoriedad
+set.seed(1)
+cv.error10=rep(0,10)
+#Hacemos la regresión
+for(i in 1:10){
+  glm.fit <- glm(q99 ~ poly((1/(n^(1/2))),degree=i),data = df)
+  cv.error10[i]=cv.glm(df,glm.fit,K=10)$delta[1]
+}
+```
+
+```{r}
+cv.error10
+
+#Error cuadrático medio:
+mean(cv.error10)
+```
+
+## 2. ¿Crees que el orden pmax = 10 es adecuado?
+
+```{r,fig.align='center',out.extra='angle=0'}
+plot(1:10,cv.error10,type="b", xlab= 'Orden', ylab = 'Error CV')
+
+```
+
+Probablemente aumentando el pmax el error seguiria disminuyendo, pero tiene un coste computacional muy alto.
+Por ello si nos fijamos en el gráfico, podemos observar que el error disminuye mucho en el segundo orden y luego cada vez disminuye menos, por tanto el pmax podría ser menor, por ejemplo 5, ya que apartir de ese punto el error casi no disminuye.
+
+## 3. Dada la ordenación inicial de las observaciones, ¿crees que el método de validación cruzada k-fold puede tener problemas?
+
+No debería tener problemas ya que la validación cruzada deberia hacer k particiones de muestras aleatorias. Aún así vamos a comprobarlo de manera empírica:
+
+```{r}
+set.seed(1)
+#Reordenamos los datos de manera aleatoria
+rows <- sample(nrow(df))
+df <- df[rows, ]
+#Volvemos a estimar
+cv.error10=rep(0,10)
+for(i in 1:10){
+  glm.fit <- glm(q99 ~ poly((1/(n^(1/2))),degree=i), data = df)
+  cv.error10[i]=cv.glm(df,glm.fit,K=10)$delta[1]
+}
+cv.error10
+plot(1:10,cv.error10,type="b", xlab= 'Orden', ylab = 'Error CV')
+```
+
+Por tanto el orden inicial de las observaciones no es relevante a la hora de hacer CV
+

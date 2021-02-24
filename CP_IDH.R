@@ -46,7 +46,7 @@ new_mat <- df_mat2[,2:5]
 pr.out.2=prcomp(new_mat, scale=TRUE)
 pr.out.2$rotation
 #La primera componente recoge muy bien que la ONU da el mismo peso a estos indicadores
-#La segunda recoge principalmente el PIB per capita
+#La segunda recoge principalmente la PIB per capita
 biplot(pr.out.2, scale=0)
 pr.out.2$sdev
 #Con el criterio de la varianza, nos quedariamos con una sola componente
